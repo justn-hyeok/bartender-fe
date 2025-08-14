@@ -1,4 +1,4 @@
-import "./assets/main.css";
+import "./assets/base.css";
 import "./assets/fonts.css";
 
 import { StrictMode } from "react";

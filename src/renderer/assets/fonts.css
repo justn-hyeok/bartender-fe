@@ -1,33 +1,8 @@
-/* Variable Font 정의 - 하나의 파일로 모든 weight/style 지원 */
-
+/* Pretendard Variable Font Definition */
 @font-face {
-  font-family: 'MyVariableFont';
-  src: url('./fonts/MyFont-Variable.woff2') format('woff2-variations');
-  font-weight: 100 900; /* 지원하는 weight 범위 */
+  font-family: 'Pretendard Variable';
+  src: url('./fonts/PretendardVariable.woff2') format('woff2');
+  font-weight: 100 900;
   font-style: normal;
-}
-
-/* 사용 예시 */
-.custom-font {
-  font-family: 'MyVariableFont', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-.light-text {
-  font-family: 'MyVariableFont';
-  font-weight: 300;
-}
-
-.regular-text {
-  font-family: 'MyVariableFont';
-  font-weight: 400;
-}
-
-.bold-text {
-  font-family: 'MyVariableFont';
-  font-weight: 700;
-}
-
-.extra-bold-text {
-  font-family: 'MyVariableFont';
-  font-weight: 800;
+  font-display: swap;
 }

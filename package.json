@@ -25,14 +25,23 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
-    "electron-updater": "^6.3.9"
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@tanstack/react-query": "^5.85.3",
+    "axios": "^1.11.0",
+    "electron-updater": "^6.3.9",
+    "react-router-dom": "^7.8.0",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@emotion/babel-plugin": "^11.13.5",
+    "@tanstack/react-query-devtools": "^5.85.3",
     "@types/node": "^22.16.5",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.7.0",
     "electron": "^37.2.3",
     "electron-builder": "^25.1.8",

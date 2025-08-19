@@ -5,7 +5,11 @@
       "Bash(rm:*)",
       "Bash(pnpm check:*)",
       "Bash(mv:*)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Bash(pnpm typecheck:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(mkdir:*)",
+      "Bash(pnpm format:fix:*)"
     ],
     "deny": [],
     "ask": [],

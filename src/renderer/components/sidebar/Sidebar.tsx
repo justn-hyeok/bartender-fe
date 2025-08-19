@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { PageType } from '../../App';
+import { ConversationStorage, type Conversation, type Message } from '../../utils/conversationStorage';
 import styles from './Sidebar.module.css';
 
 interface SidebarItemProps {
@@ -25,50 +26,52 @@ function SidebarItem({ icon, label, isActive = false, onClick }: SidebarItemProp
   );
 }
 
-interface Conversation {
-  id: string;
-  name: string;
-}
-
 interface SidebarProps {
   currentPage: PageType;
   setCurrentPage: (page: PageType) => void;
+  onAddConversation?: (addFunction: (name: string, firstMessage?: Message) => string) => void;
 }
 
 type ActiveMenu = '앱 연결' | '할 일' | '새 대화' | string;
 
-export default function Sidebar({ currentPage, setCurrentPage }: SidebarProps) {
+export default function Sidebar({ currentPage, setCurrentPage, onAddConversation }: SidebarProps) {
   const [activeMenu, setActiveMenu] = useState<ActiveMenu>(currentPage);
-  const [conversations, /*setConversations*/] = useState<Conversation[]>([
-    { id: '1', name: '대화 1' },
-    { id: '2', name: '대화 2' },
-    { id: '3', name: '대화 3' },
-    { id: '4', name: '대화 4' }
-  ]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+
+  useEffect(() => {
+    const loadedConversations = ConversationStorage.getAll();
+    setConversations(loadedConversations);
+  }, []);
 
   const handleMenuClick = (menu: ActiveMenu) => {
     setActiveMenu(menu);
-    setCurrentPage(menu as PageType);
-  };
-
-  /* 대화 추가 함수
-  const addConversation = (name: string) => {
-    if (conversations.some(conv => conv.name === name)) {
-      alert('이미 존재하는 대화 이름입니다.');
-      return false;
+    
+    // 대화인 경우 ID로 페이지 설정, 그 외에는 메뉴 이름으로 설정
+    const conversation = conversations.find(conv => conv.name === menu);
+    if (conversation) {
+      setCurrentPage(conversation.id as PageType);
+    } else {
+      setCurrentPage(menu as PageType);
     }
-
-    const newConversation: Conversation = {
-      id: Date.now().toString(),
-      name: name
-    };
-
-    setConversations(prev => [...prev, newConversation]);
-    setActiveMenu(name);
-    setCurrentPage(name as PageType);
-    return true;
   };
-  */
+
+  const addConversation = (name: string, firstMessage?: Message) => {
+    const uniqueName = ConversationStorage.generateUniqueName(name);
+    
+    const newConversation = ConversationStorage.create(uniqueName, firstMessage);
+    const updatedConversations = ConversationStorage.getAll();
+    setConversations(updatedConversations);
+    setActiveMenu(uniqueName);
+    setCurrentPage(newConversation.id as PageType);
+    
+    return newConversation.id;
+  };
+
+  useEffect(() => {
+    if (onAddConversation) {
+      onAddConversation(addConversation);
+    }
+  }, [onAddConversation]);
 
   return (
     <div className={styles.sidebar}>

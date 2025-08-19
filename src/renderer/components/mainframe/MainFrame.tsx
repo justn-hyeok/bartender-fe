@@ -3,7 +3,7 @@ import ChatPage from "../../pages/ChatPage";
 import ConnectPage from "../../pages/ConnectPage";
 import NewPage from "../../pages/NewPage";
 import TodoPage from "../../pages/TodoPage";
-import "./MainFrame.css";
+import styles from "./MainFrame.module.css";
 
 interface MainFrameProps {
   currentPage: PageType;
@@ -12,20 +12,18 @@ interface MainFrameProps {
 function MainFrame({ currentPage }: MainFrameProps) {
   const renderPage = () => {
     switch (currentPage) {
-      case "chat":
-        return <ChatPage />;
-      case "connect":
+      case "앱 연결":
         return <ConnectPage />;
-      case "todo":
+      case "할 일":
         return <TodoPage />;
-      case "new":
+      case "새 대화":
         return <NewPage />;
       default:
         return <ChatPage />;
     }
   };
 
-  return <main className="main-frame">{renderPage()}</main>;
+  return <main className={styles.mainFrame}>{renderPage()}</main>;
 }
 
 export default MainFrame;

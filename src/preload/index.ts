@@ -12,7 +12,10 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld("electron", electronAPI);
     contextBridge.exposeInMainWorld("api", api);
   } catch (error) {
-    console.error(error);
+    // 프로덕션에서는 에러 정보 노출 방지
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Preload context bridge error:', error);
+    }
   }
 } else {
   // @ts-expect-error (define in dts)

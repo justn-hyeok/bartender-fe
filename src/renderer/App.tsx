@@ -8,12 +8,13 @@ import ChatPage from './pages/chat/ChatPage';
 import type { Message } from './utils/conversationStorage';
 
 export type PageType = '앱 연결' | '할 일' | '새 대화' | string;
+type AddConversationFunction = (name: string, firstMessage?: Message) => string;
 
 function App(): React.JSX.Element {
   const [currentPage, setCurrentPage] = useState<PageType>('새 대화');
-  const [addConversationFunction, setAddConversationFunction] = useState<((name: string, firstMessage?: Message) => string) | null>(null);
+  const [addConversationFunction, setAddConversationFunction] = useState<AddConversationFunction | null>(null);
 
-  const handleAddConversation = (addFunction: (name: string, firstMessage?: Message) => string) => {
+  const handleAddConversation = (addFunction: AddConversationFunction) => {
     setAddConversationFunction(() => addFunction);
   };
 

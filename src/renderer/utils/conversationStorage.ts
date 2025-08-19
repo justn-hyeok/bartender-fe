@@ -17,6 +17,22 @@ const STORAGE_KEY = 'bartender_conversations';
 
 type ConversationUpdateListener = (conversationId: string) => void;
 
+// Storage에서 불러올 때 사용하는 타입들
+interface StoredMessage {
+  id: string;
+  content: string;
+  isUser: boolean;
+  timestamp: string; // ISO string으로 저장됨
+}
+
+interface StoredConversation {
+  id: string;
+  name: string;
+  messages: StoredMessage[];
+  createdAt: string; // ISO string으로 저장됨
+  updatedAt: string; // ISO string으로 저장됨
+}
+
 export class ConversationStorage {
   private static listeners: Map<string, Set<ConversationUpdateListener>> = new Map();
   static getAll(): Conversation[] {
@@ -24,12 +40,12 @@ export class ConversationStorage {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) return [];
 
-      const conversations = JSON.parse(stored);
-      return conversations.map((conv: any) => ({
+      const conversations: StoredConversation[] = JSON.parse(stored);
+      return conversations.map((conv: StoredConversation) => ({
         ...conv,
         createdAt: new Date(conv.createdAt),
         updatedAt: new Date(conv.updatedAt),
-        messages: conv.messages.map((msg: any) => ({
+        messages: conv.messages.map((msg: StoredMessage) => ({
           ...msg,
           timestamp: new Date(msg.timestamp)
         }))

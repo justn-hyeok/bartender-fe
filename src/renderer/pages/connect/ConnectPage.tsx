@@ -71,11 +71,11 @@ function ConnectPage() {
       status: 'toggle',
       category: 'computer'
     },
-    ...Array(4).fill(null).map((_, i) => ({
+    ...Array(4).fill(null).map((_, i): App => ({
       id: 6 + i,
       title: '이름',
       description: '본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문...',
-      status: 'toggle' as const,
+      status: 'toggle',
       category: 'computer'
     }))
   ];
@@ -96,7 +96,7 @@ function ConnectPage() {
       category: 'cloud'
     },
     {
-      id: 12,
+      id: 11,
       title: '구글 드라이브',
       description: '사용자의 구글 드라이브에 접근합니다.',
       status: 'toggle',
@@ -165,6 +165,7 @@ function ConnectPage() {
   const appStatesExtended = {
     ...appStates,
     10: { status: 'pending' as const, statusText: '읽기 전용' },
+    11: { status: 'active' as const, statusText: '활성화' }, // 구글 드라이브 ID 수정
     12: { status: 'active' as const, statusText: '활성화' }
   };
 

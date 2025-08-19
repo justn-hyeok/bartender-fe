@@ -36,13 +36,12 @@ type ActiveMenu = '앱 연결' | '할 일' | '새 대화' | string;
 
 export default function Sidebar({ currentPage, setCurrentPage, onAddConversation }: SidebarProps) {
   const [activeMenu, setActiveMenu] = useState<ActiveMenu>(currentPage);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-
-  // 컴포넌트 마운트 시 로컬 스토리지에서 대화 목록 로드
-  useEffect(() => {
-    const loadedConversations = ConversationStorage.getAll();
-    setConversations(loadedConversations);
-  }, []);
+  const [conversations, setConversations] = useState<Conversation[]>([
+    { id: '1', name: '대화 1' },
+    { id: '2', name: '대화 2' },
+    { id: '3', name: '대화 3' },
+    { id: '4', name: '대화 4' }
+  ]);
 
   const handleMenuClick = (menu: ActiveMenu) => {
     setActiveMenu(menu);
@@ -56,14 +55,17 @@ export default function Sidebar({ currentPage, setCurrentPage, onAddConversation
     }
   };
 
-  const addConversation = (name: string, firstMessage?: Message): string => {
-    // 고유한 이름 생성
-    const uniqueName = ConversationStorage.generateUniqueName(name);
+  const addConversation = (name: string) => {
+    if (conversations.some(conv => conv.name === name)) {
+      alert('이미 존재하는 대화 이름입니다.');
+      return false;
+    }
     
-    // 로컬 스토리지에 새 대화 생성
-    const newConversation = ConversationStorage.create(uniqueName, firstMessage);
+    const newConversation: Conversation = {
+      id: Date.now().toString(),
+      name: name
+    };
     
-    // 상태 업데이트
     setConversations(prev => [...prev, newConversation]);
     setActiveMenu(uniqueName);
     setCurrentPage(newConversation.id as PageType);
@@ -71,42 +73,35 @@ export default function Sidebar({ currentPage, setCurrentPage, onAddConversation
     return newConversation.id;
   };
 
-  // 부모 컴포넌트에 addConversation 함수 전달
-  useEffect(() => {
-    if (onAddConversation) {
-      onAddConversation(addConversation);
-    }
-  }, [onAddConversation]);
-
   return (
     <div className={styles.sidebar}>
       <div className={styles.topSection}>
-        <SidebarItem 
-          icon="ic" 
-          label="앱 연결" 
+        <SidebarItem
+          icon="ic"
+          label="앱 연결"
           isActive={activeMenu === '앱 연결'}
           onClick={() => handleMenuClick('앱 연결')}
         />
-        <SidebarItem 
-          icon="on" 
-          label="할 일" 
+        <SidebarItem
+          icon="on"
+          label="할 일"
           isActive={activeMenu === '할 일'}
           onClick={() => handleMenuClick('할 일')}
         />
-        <SidebarItem 
-          icon="s" 
-          label="새 대화" 
+        <SidebarItem
+          icon="s"
+          label="새 대화"
           isActive={activeMenu === '새 대화'}
           onClick={() => handleMenuClick('새 대화')}
         />
       </div>
-      
+
       <div className={styles.conversationSection}>
         {conversations.map(conversation => (
-          <SidebarItem 
+          <SidebarItem
             key={conversation.id}
             icon=""
-            label={conversation.name} 
+            label={conversation.name}
             isActive={activeMenu === conversation.name}
             onClick={() => handleMenuClick(conversation.name)}
           />

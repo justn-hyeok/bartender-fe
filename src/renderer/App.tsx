@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
-import NewPage from './components/newpage/NewPage';
+import NewPage from './pages/newpage/NewPage';
+
+export type PageType = '앱 연결' | '할 일' | '새 대화' | string;
 
 function App(): React.JSX.Element {
-  const [currentPage, setCurrentPage] = useState<string>('새 대화');
+  const [currentPage, setCurrentPage] = useState<PageType>('새 대화');
 
   const renderPage = () => {
     switch (currentPage) {
@@ -36,7 +38,7 @@ function App(): React.JSX.Element {
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <Sidebar onPageChange={setCurrentPage} />
+      <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
       {renderPage()}
     </div>
   );

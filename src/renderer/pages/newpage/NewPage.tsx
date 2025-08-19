@@ -1,6 +1,6 @@
 import styles from './NewPage.module.css';
-import Title from '../title/Title';
-import ChatForm from '../chatform/ChatForm';
+import Title from '../../components/title/Title';
+import ChatForm from '../../components/chatform/ChatForm';
 
 export default function NewPage() {
   const handleMessageSubmit = (message: string) => {

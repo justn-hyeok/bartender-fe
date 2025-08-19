@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "HWANG JUN HYEOK",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "dev": "electron-vite dev",
@@ -53,6 +53,37 @@
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3",
     "vite": "^7.0.5"
+  },
+  "build": {
+    "appId": "com.hwangjunhyeok.bartender",
+    "productName": "Bartender FE",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "resources/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png"
+    }
   },
   "pnpm": {
     "onlyBuiltDependencies": [

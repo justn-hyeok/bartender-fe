@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
-import NewPage from './pages/newpage/NewPage';
+import NewPage from './pages/new/NewPage';
 import ConnectPage from './pages/connect/ConnectPage';
 import TodoPage from './pages/TodoPage';
-import ChatPage from './pages/ChatPage';
+import ChatPage from './pages/chat/ChatPage';
 import type { Message } from './utils/conversationStorage';
 
 export type PageType = '앱 연결' | '할 일' | '새 대화' | string;

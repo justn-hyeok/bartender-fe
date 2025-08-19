@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './ChatPage.module.css';
-import ChatForm from '../components/chatform/ChatForm';
-import { ConversationStorage, type Message } from '../utils/conversationStorage';
-import { AIService } from '../utils/aiService';
+import ChatForm from '../../components/chatform/ChatForm';
+import { ConversationStorage, type Message } from '../../utils/conversationStorage';
+import { AIService } from '../../utils/aiService';
 
 interface ChatPageProps {
   conversationId?: string;

@@ -1,7 +1,7 @@
 import type { PageType } from "../../App";
-import ChatPage from "../../pages/ChatPage";
-import ConnectPage from "../../pages/ConnectPage";
-import NewPage from "../../pages/newpage/NewPage";
+import ChatPage from "../../pages/chat/ChatPage";
+import ConnectPage from "../../pages/connect/ConnectPage";
+import NewPage from "../../pages/new/NewPage";
 import TodoPage from "../../pages/TodoPage";
 import styles from "./MainFrame.module.css";
 

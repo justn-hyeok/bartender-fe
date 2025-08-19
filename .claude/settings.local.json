@@ -5,7 +5,9 @@
       "Bash(rm:*)",
       "Bash(pnpm check:*)",
       "Bash(mv:*)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "mcp__figma-dev-mode-mcp-server__get_code",
+      "mcp__figma-dev-mode-mcp-server__get_image"
     ],
     "deny": [],
     "ask": [],

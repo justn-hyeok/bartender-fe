@@ -32,61 +32,66 @@ export default function ChatPage({ conversationId }: ChatPageProps) {
     }
   }, [conversationId]);
 
-  // 주기적으로 메시지 업데이트 확인 (NewPage에서 추가된 메시지 반영)
+  // 메시지 업데이트를 이벤트 기반으로 처리
   useEffect(() => {
     if (!conversationId) return;
 
-    const interval = setInterval(() => {
+    const handleMessagesUpdate = () => {
       const conversation = ConversationStorage.getById(conversationId);
-      if (conversation && conversation.messages.length !== messagesLengthRef.current) {
+      if (conversation) {
         setMessages(conversation.messages);
         messagesLengthRef.current = conversation.messages.length;
       }
-    }, 500);
+    };
 
-    return () => clearInterval(interval);
+    // 구독 등록
+    ConversationStorage.subscribe(conversationId, handleMessagesUpdate);
+
+    return () => {
+      ConversationStorage.unsubscribe(conversationId, handleMessagesUpdate);
+    };
   }, [conversationId]);
 
   const handleSendMessage = async (content: string) => {
-    
+
     const newMessage: Message = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       content,
       isUser: true,
       timestamp: new Date()
     };
-    
+
     // 로컬 상태 업데이트
     setMessages(prev => [...prev, newMessage]);
-    
+
     // 로컬 스토리지에 메시지 저장
     if (conversationId) {
       ConversationStorage.addMessage(conversationId, newMessage);
     }
-    
+
     // AI 연결 상태 확인
     if (!AIService.isAIConnected()) {
       const aiResponse = await AIService.createAIResponse(content);
       setMessages(prev => [...prev, aiResponse]);
-      
+
       if (conversationId) {
         ConversationStorage.addMessage(conversationId, aiResponse);
       }
-      
+
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     // AI 응답 생성 및 추가
     AIService.createAIResponse(content).then(aiResponse => {
       setMessages(prev => [...prev, aiResponse]);
-      
+
       // AI 응답도 로컬 스토리지에 저장
       if (conversationId) {
         ConversationStorage.addMessage(conversationId, aiResponse);
       }
-      
+
       setIsLoading(false);
     });
   };
@@ -109,7 +114,7 @@ export default function ChatPage({ conversationId }: ChatPageProps) {
           ))}
         </div>
       </div>
-      
+
       <div className={styles.chatFormContainer}>
         <ChatForm onSubmit={handleSendMessage} isLoading={isLoading} />
       </div>

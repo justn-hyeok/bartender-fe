@@ -15,12 +15,15 @@ export interface Conversation {
 
 const STORAGE_KEY = 'bartender_conversations';
 
+type ConversationUpdateListener = (conversationId: string) => void;
+
 export class ConversationStorage {
+  private static listeners: Map<string, Set<ConversationUpdateListener>> = new Map();
   static getAll(): Conversation[] {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) return [];
-      
+
       const conversations = JSON.parse(stored);
       return conversations.map((conv: any) => ({
         ...conv,
@@ -50,10 +53,34 @@ export class ConversationStorage {
     }
   }
 
+  static subscribe(conversationId: string, listener: ConversationUpdateListener): void {
+    if (!this.listeners.has(conversationId)) {
+      this.listeners.set(conversationId, new Set());
+    }
+    this.listeners.get(conversationId)!.add(listener);
+  }
+
+  static unsubscribe(conversationId: string, listener: ConversationUpdateListener): void {
+    const conversationListeners = this.listeners.get(conversationId);
+    if (conversationListeners) {
+      conversationListeners.delete(listener);
+      if (conversationListeners.size === 0) {
+        this.listeners.delete(conversationId);
+      }
+    }
+  }
+
+  private static notifyListeners(conversationId: string): void {
+    const conversationListeners = this.listeners.get(conversationId);
+    if (conversationListeners) {
+      conversationListeners.forEach(listener => listener(conversationId));
+    }
+  }
+
   static create(name: string, firstMessage?: Message): Conversation {
     const now = new Date();
     const conversation: Conversation = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       name,
       messages: firstMessage ? [firstMessage] : [],
       createdAt: now,
@@ -63,22 +90,22 @@ export class ConversationStorage {
     const conversations = this.getAll();
     conversations.push(conversation);
     this.save(conversations);
-    
+
     return conversation;
   }
 
   static update(id: string, updates: Partial<Conversation>): boolean {
     const conversations = this.getAll();
     const index = conversations.findIndex(conv => conv.id === id);
-    
+
     if (index === -1) return false;
-    
+
     conversations[index] = {
       ...conversations[index],
       ...updates,
       updatedAt: new Date()
     };
-    
+
     this.save(conversations);
     return true;
   }
@@ -86,22 +113,23 @@ export class ConversationStorage {
   static addMessage(conversationId: string, message: Message): boolean {
     const conversations = this.getAll();
     const index = conversations.findIndex(conv => conv.id === conversationId);
-    
+
     if (index === -1) return false;
-    
+
     conversations[index].messages.push(message);
     conversations[index].updatedAt = new Date();
-    
+
     this.save(conversations);
+    this.notifyListeners(conversationId);
     return true;
   }
 
   static delete(id: string): boolean {
     const conversations = this.getAll();
     const filtered = conversations.filter(conv => conv.id !== id);
-    
+
     if (filtered.length === conversations.length) return false;
-    
+
     this.save(filtered);
     return true;
   }
@@ -109,15 +137,15 @@ export class ConversationStorage {
   static generateUniqueName(baseName: string): string {
     const conversations = this.getAll();
     const existingNames = conversations.map(conv => conv.name);
-    
+
     let name = baseName;
     let counter = 1;
-    
+
     while (existingNames.includes(name)) {
       name = `${baseName} ${counter}`;
       counter++;
     }
-    
+
     return name;
   }
 }

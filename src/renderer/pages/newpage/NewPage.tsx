@@ -36,6 +36,14 @@ export default function NewPage({ onAddConversation }: NewPageProps) {
       // 즉시 대화 생성
       const conversationId = onAddConversation(conversationName, firstMessage);
       
+      // AI 연결 상태 확인 후 응답 생성
+      if (!AIService.isAIConnected()) {
+        const aiResponse = await AIService.createAIResponse(message);
+        ConversationStorage.addMessage(conversationId, aiResponse);
+        setIsLoading(false);
+        return;
+      }
+      
       // AI 응답 생성 및 추가
       AIService.createAIResponse(message).then(aiResponse => {
         ConversationStorage.addMessage(conversationId, aiResponse);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './ChatPage.module.css';
 import ChatForm from '../components/chatform/ChatForm';
 import { ConversationStorage, type Message } from '../utils/conversationStorage';
@@ -11,7 +11,7 @@ interface ChatPageProps {
 export default function ChatPage({ conversationId }: ChatPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isFirstAIResponsePending, setIsFirstAIResponsePending] = useState(false);
+  const messagesLengthRef = useRef(0);
 
   // 대화 ID가 있을 때 해당 대화의 메시지 로드
   useEffect(() => {
@@ -19,24 +19,35 @@ export default function ChatPage({ conversationId }: ChatPageProps) {
       const conversation = ConversationStorage.getById(conversationId);
       if (conversation) {
         setMessages(conversation.messages);
-        
-        // 첫 번째 AI 응답이 아직 오지 않았는지 확인
-        const hasUserMessage = conversation.messages.some(msg => msg.isUser);
-        const hasAIResponse = conversation.messages.some(msg => !msg.isUser);
-        setIsFirstAIResponsePending(hasUserMessage && !hasAIResponse);
+        messagesLengthRef.current = conversation.messages.length;
+      } else {
+        // conversationId가 있지만 해당 대화를 찾을 수 없을 때도 빈 배열
+        setMessages([]);
+        messagesLengthRef.current = 0;
       }
     } else {
       // conversationId가 없을 때는 빈 메시지 배열
       setMessages([]);
-      setIsFirstAIResponsePending(false);
+      messagesLengthRef.current = 0;
     }
   }, [conversationId]);
 
-  const handleSendMessage = (content: string) => {
-    // 첫 번째 AI 응답 대기 중이면 새 메시지 전송 불가
-    if (isFirstAIResponsePending) {
-      return;
-    }
+  // 주기적으로 메시지 업데이트 확인 (NewPage에서 추가된 메시지 반영)
+  useEffect(() => {
+    if (!conversationId) return;
+
+    const interval = setInterval(() => {
+      const conversation = ConversationStorage.getById(conversationId);
+      if (conversation && conversation.messages.length !== messagesLengthRef.current) {
+        setMessages(conversation.messages);
+        messagesLengthRef.current = conversation.messages.length;
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [conversationId]);
+
+  const handleSendMessage = async (content: string) => {
     
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -53,6 +64,18 @@ export default function ChatPage({ conversationId }: ChatPageProps) {
       ConversationStorage.addMessage(conversationId, newMessage);
     }
     
+    // AI 연결 상태 확인
+    if (!AIService.isAIConnected()) {
+      const aiResponse = await AIService.createAIResponse(content);
+      setMessages(prev => [...prev, aiResponse]);
+      
+      if (conversationId) {
+        ConversationStorage.addMessage(conversationId, aiResponse);
+      }
+      
+      return;
+    }
+    
     setIsLoading(true);
     
     // AI 응답 생성 및 추가
@@ -65,7 +88,6 @@ export default function ChatPage({ conversationId }: ChatPageProps) {
       }
       
       setIsLoading(false);
-      setIsFirstAIResponsePending(false); // 첫 AI 응답 완료
     });
   };
 
@@ -89,7 +111,7 @@ export default function ChatPage({ conversationId }: ChatPageProps) {
       </div>
       
       <div className={styles.chatFormContainer}>
-        <ChatForm onSubmit={handleSendMessage} isLoading={isLoading || isFirstAIResponsePending} />
+        <ChatForm onSubmit={handleSendMessage} isLoading={isLoading} />
       </div>
     </div>
   );

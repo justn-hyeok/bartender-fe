@@ -36,12 +36,12 @@ type ActiveMenu = '앱 연결' | '할 일' | '새 대화' | string;
 
 export default function Sidebar({ currentPage, setCurrentPage, onAddConversation }: SidebarProps) {
   const [activeMenu, setActiveMenu] = useState<ActiveMenu>(currentPage);
-  const [conversations, setConversations] = useState<Conversation[]>([
-    { id: '1', name: '대화 1' },
-    { id: '2', name: '대화 2' },
-    { id: '3', name: '대화 3' },
-    { id: '4', name: '대화 4' }
-  ]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+
+  useEffect(() => {
+    const loadedConversations = ConversationStorage.getAll();
+    setConversations(loadedConversations);
+  }, []);
 
   const handleMenuClick = (menu: ActiveMenu) => {
     setActiveMenu(menu);
@@ -55,23 +55,23 @@ export default function Sidebar({ currentPage, setCurrentPage, onAddConversation
     }
   };
 
-  const addConversation = (name: string) => {
-    if (conversations.some(conv => conv.name === name)) {
-      alert('이미 존재하는 대화 이름입니다.');
-      return false;
-    }
+  const addConversation = (name: string, firstMessage?: Message) => {
+    const uniqueName = ConversationStorage.generateUniqueName(name);
     
-    const newConversation: Conversation = {
-      id: Date.now().toString(),
-      name: name
-    };
-    
-    setConversations(prev => [...prev, newConversation]);
+    const newConversation = ConversationStorage.create(uniqueName, firstMessage);
+    const updatedConversations = ConversationStorage.getAll();
+    setConversations(updatedConversations);
     setActiveMenu(uniqueName);
     setCurrentPage(newConversation.id as PageType);
     
     return newConversation.id;
   };
+
+  useEffect(() => {
+    if (onAddConversation) {
+      onAddConversation(addConversation);
+    }
+  }, [onAddConversation]);
 
   return (
     <div className={styles.sidebar}>

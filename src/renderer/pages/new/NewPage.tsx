@@ -22,20 +22,20 @@ export default function NewPage({ onAddConversation }: NewPageProps) {
   const handleMessageSubmit = async (message: string) => {
     if (onAddConversation) {
       setIsLoading(true);
-      
+
       const conversationName = generateConversationName(message);
-      
+
       // 첫 메시지 객체 생성
       const firstMessage: Message = {
-        id: Date.now().toString(),
+        id: crypto.randomUUID(),
         content: message,
         isUser: true,
         timestamp: new Date()
       };
-      
+
       // 즉시 대화 생성
       const conversationId = onAddConversation(conversationName, firstMessage);
-      
+
       // AI 연결 상태 확인 후 응답 생성
       if (!AIService.isAIConnected()) {
         const aiResponse = await AIService.createAIResponse(message);
@@ -43,13 +43,13 @@ export default function NewPage({ onAddConversation }: NewPageProps) {
         setIsLoading(false);
         return;
       }
-      
+
       // AI 응답 생성 및 추가
       AIService.createAIResponse(message).then(aiResponse => {
         ConversationStorage.addMessage(conversationId, aiResponse);
         setIsLoading(false);
       });
-      
+
     } else {
       console.log('메시지 전송:', message);
     }

@@ -27,7 +27,9 @@ function App(): React.JSX.Element {
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      {renderPage()}
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        {renderPage()}
+      </div>
     </div>
   );
 }

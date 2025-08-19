@@ -1,0 +1,25 @@
+.filterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 48px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: var(--subtitle-font-size);
+  font-weight: var(--font-medium);
+  line-height: var(--subtitle-line-height);
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.filterButton.active {
+  background: var(--white);
+  color: var(--black);
+}
+
+.filterButton.inactive {
+  background: var(--gray-800);
+  color: var(--white);
+}

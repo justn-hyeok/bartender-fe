@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.hwangjunhyeok.bartender
 productName: bartender-fe
 directories:
   buildResources: build
@@ -37,6 +37,6 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-publish:
-  provider: generic
-  url: https://example.com/auto-updates
+# publish:
+#   provider: generic
+#   url: https://example.com/auto-updates

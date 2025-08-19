@@ -4,7 +4,7 @@
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "HWANG JUN HYEOK",
-  "homepage": "https://electron-vite.org",
+  "homepage": "https://github.com/justn-hyeok/bartender-fe",
   "scripts": {
     "dev": "electron-vite dev",
     "build": "pnpm typecheck && electron-vite build",

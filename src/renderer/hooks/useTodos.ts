@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import type { TodoItem } from '../types/todo';
-import { todoService } from '../services/todoService';
 
 const mockTodos: TodoItem[] = [
   {

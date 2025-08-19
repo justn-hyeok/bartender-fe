@@ -1,0 +1,104 @@
+.todoCard {
+  background: var(--gray-800);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.todoHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.todoTitle {
+  font-family: var(--font-primary);
+  font-size: var(--body1-font-size);
+  font-weight: var(--font-regular);
+  line-height: var(--body1-line-height);
+  color: var(--white);
+}
+
+.todoPriority {
+  font-family: var(--font-primary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-regular);
+  line-height: var(--caption-line-height);
+  color: var(--gray-400);
+}
+
+.overdueLabel {
+  font-family: var(--font-primary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-regular);
+  line-height: var(--caption-line-height);
+  color: var(--red-400);
+}
+
+.todoContent {
+  font-family: var(--font-primary);
+  font-size: var(--body2-font-size);
+  font-weight: var(--font-regular);
+  line-height: var(--body2-line-height);
+  color: var(--white);
+}
+
+.todoFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todoMeta {
+  display: flex;
+  gap: 10px;
+  font-family: var(--font-primary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-regular);
+  line-height: var(--caption-line-height);
+  color: var(--gray-600);
+}
+
+.todoActions {
+  display: flex;
+  gap: 8px;
+  height: 27px;
+}
+
+.deleteButton,
+.completeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-regular);
+  line-height: var(--caption-line-height);
+  color: var(--white);
+  width: 48px;
+  transition: var(--transition-fast);
+}
+
+.deleteButton {
+  background: var(--red-500);
+}
+
+.deleteButton:hover {
+  background: var(--red-600);
+}
+
+.completeButton {
+  background: #30b849;
+}
+
+.completeButton:hover {
+  background: #2a9f3f;
+}

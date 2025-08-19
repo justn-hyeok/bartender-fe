@@ -1,0 +1,100 @@
+.container {
+  background: var(--gray-900);
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: var(--h1-font-size);
+  font-weight: var(--font-semibold);
+  line-height: var(--h1-line-height);
+  color: var(--white);
+  margin: 0;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 48px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: var(--subtitle-font-size);
+  font-weight: var(--font-medium);
+  line-height: var(--subtitle-line-height);
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.filterButton.active {
+  background: var(--white);
+  color: var(--black);
+}
+
+.filterButton.inactive {
+  background: var(--gray-800);
+  color: var(--white);
+}
+
+.content {
+  position: absolute;
+  left: 220px;
+  top: 125px;
+  width: 720px;
+  height: calc(100vh - 125px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  padding-right: 16px;
+}
+
+.loading,
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-family: var(--font-primary);
+  font-size: var(--body1-font-size);
+  color: var(--white);
+}
+
+.error {
+  color: var(--red-400);
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-family: var(--font-primary);
+  font-size: var(--body1-font-size);
+  color: var(--gray-600);
+}
+
+.scrollbar {
+  position: absolute;
+  height: 864px;
+  width: 8px;
+  top: 0;
+  right: 2px;
+  background: transparent;
+}

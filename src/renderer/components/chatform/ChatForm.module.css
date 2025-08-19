@@ -38,6 +38,15 @@
   color: #b5bac2;
 }
 
+.textInput:disabled {
+  color: #8d929a;
+  cursor: not-allowed;
+}
+
+.textInput:disabled::placeholder {
+  color: #8d929a;
+}
+
 .buttonRow {
   display: flex;
   align-items: center;
@@ -63,8 +72,13 @@
   transition: background-color var(--transition-fast);
 }
 
-.iconButton:hover {
+.iconButton:hover:not(:disabled) {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.iconButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .iconImage {
@@ -92,6 +106,11 @@
   transition: background-color var(--transition-fast);
 }
 
-.submitButton:hover {
+.submitButton:hover:not(:disabled) {
   background-color: #990f0f;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

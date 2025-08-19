@@ -1,8 +1,18 @@
-function App(): React.JSX.Element {
+import { useState } from "react";
+import { MainFrame, Sidebar } from "./components";
+import "./assets/styles/base.css";
+import "./assets/styles/fonts.css";
+import "./App.css";
+
+export type PageType = "chat" | "connect" | "todo" | "new";
+
+function App() {
+  const [currentPage, setCurrentPage] = useState<PageType>("chat");
+
   return (
-    <div>
-      <h1 className="display">Bartender</h1>
-      <p className="body1">앱이 준비되었습니다.</p>
+    <div className="app">
+      <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <MainFrame currentPage={currentPage} />
     </div>
   );
 }

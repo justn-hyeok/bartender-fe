@@ -1,0 +1,41 @@
+.sidebar {
+  width: 16.1vw;
+  height: 100vh;
+  background-color: var(--gray-800);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1.4vw;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  color: var(--white);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px;
+}
+
+.nav-item {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: var(--gray-300);
+}
+
+.nav-item:hover {
+  background-color: var(--gray-700);
+  color: var(--white);
+}
+
+.nav-item.active {
+  background-color: var(--blue-600);
+  color: var(--white);
+}

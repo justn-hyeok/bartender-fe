@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
 import NewPage from './pages/newpage/NewPage';
-import ConnectPage from './pages/ConnectPage';
+import ConnectPage from './pages/connect/ConnectPage';
 import TodoPage from './pages/TodoPage';
 import ChatPage from './pages/ChatPage';
 

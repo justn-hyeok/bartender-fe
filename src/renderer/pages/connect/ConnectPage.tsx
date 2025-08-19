@@ -12,6 +12,7 @@ interface App {
   description: string;
   hasState?: boolean;
   status?: 'toggle';
+  category: string;
 }
 
 function ConnectPage() {
@@ -20,9 +21,11 @@ function ConnectPage() {
     2: { status: 'pending', statusText: '읽기 전용' },
     3: { status: 'active', statusText: '활성화' }
   });
+  const [toggleStates, setToggleStates] = useState<Record<number, boolean>>({});
+  const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const categories = [
-    { id: 'all', label: '전체', active: true },
+    { id: 'all', label: '전체' },
     { id: 'computer', label: '컴퓨터 접근' },
     { id: 'cloud', label: '구글' },
     { id: 'email', label: '메일' },
@@ -34,19 +37,22 @@ function ConnectPage() {
       id: 1,
       title: '파일 읽기/쓰기',
       description: '사용자의 파일에 접근합니다.',
-      hasState: true
+      hasState: true,
+      category: 'popular'
     },
     {
       id: 2,
       title: '구글 캘린더',
       description: '사용자의 구글 캘린더에 접근합니다.',
-      hasState: true
+      hasState: true,
+      category: 'popular'
     },
     {
       id: 3,
       title: 'GMAIL',
       description: '사용자의 GMAIL 받은메세지에 조회합니다.',
-      hasState: true
+      hasState: true,
+      category: 'popular'
     }
   ];
 
@@ -55,19 +61,22 @@ function ConnectPage() {
       id: 4,
       title: '파일 읽기',
       description: '사용자의 파일에 접근하여 읽습니다.',
-      status: 'toggle'
+      status: 'toggle',
+      category: 'computer'
     },
     {
       id: 5,
       title: '파일 쓰기',
       description: '사용자의 파일에 접근하여 작성합니다.',
-      status: 'toggle'
+      status: 'toggle',
+      category: 'computer'
     },
     ...Array(4).fill(null).map((_, i) => ({
       id: 6 + i,
       title: '이름',
       description: '본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문...',
-      status: 'toggle' as const
+      status: 'toggle' as const,
+      category: 'computer'
     }))
   ];
 
@@ -76,25 +85,110 @@ function ConnectPage() {
       id: 10,
       title: '구글 캘린더',
       description: '사용자의 구글 캘린더에 접근합니다.',
-      status: 'toggle'
+      hasState: true,
+      category: 'cloud'
     },
     {
       id: 11,
       title: '스프레드시트',
       description: '사용자의 파일에 접근하여 작성합니다.',
-      status: 'toggle'
+      status: 'toggle',
+      category: 'cloud'
     },
     {
       id: 12,
-      title: '이름',
-      description: '본문본문본문본문본문본문본문본문본문본문본문본문본문본문본문...',
-      status: 'toggle'
+      title: '구글 드라이브',
+      description: '사용자의 구글 드라이브에 접근합니다.',
+      status: 'toggle',
+      category: 'cloud'
     }
   ];
 
+  const emailApps: App[] = [
+    {
+      id: 12,
+      title: 'GMAIL',
+      description: '사용자의 GMAIL 받은메세지에 조회합니다.',
+      hasState: true,
+      category: 'email'
+    },
+    {
+      id: 13,
+      title: 'Outlook',
+      description: '사용자의 Outlook 메일에 접근합니다.',
+      status: 'toggle',
+      category: 'email'
+    },
+    {
+      id: 14,
+      title: 'Yahoo Mail',
+      description: '사용자의 Yahoo 메일에 접근합니다.',
+      status: 'toggle',
+      category: 'email'
+    },
+    {
+      id: 15,
+      title: 'Apple Mail',
+      description: '사용자의 Apple Mail에 접근합니다.',
+      status: 'toggle',
+      category: 'email'
+    }
+  ];
+
+  const externalApps: App[] = [
+    {
+      id: 16,
+      title: 'Slack',
+      description: 'Slack 워크스페이스에 접근합니다.',
+      status: 'toggle',
+      category: 'external'
+    },
+    {
+      id: 17,
+      title: 'Discord',
+      description: 'Discord 서버에 접근합니다.',
+      status: 'toggle',
+      category: 'external'
+    },
+    {
+      id: 18,
+      title: 'Notion',
+      description: 'Notion 워크스페이스에 접근합니다.',
+      status: 'toggle',
+      category: 'external'
+    }
+  ];
+
+  const allApps = [...popularApps, ...computerApps, ...googleApps, ...emailApps, ...externalApps];
+
+  // 인기 앱 ID들을 다른 카테고리에서 추가
+  const appStatesExtended = {
+    ...appStates,
+    10: { status: 'pending' as const, statusText: '읽기 전용' },
+    12: { status: 'active' as const, statusText: '활성화' }
+  };
+
+  const handleCategoryClick = (categoryId: string) => {
+    setActiveCategory(categoryId);
+  };
+
+  const toggleSwitch = (appId: number) => {
+    setToggleStates(prev => ({
+      ...prev,
+      [appId]: !prev[appId]
+    }));
+  };
+
+  const getFilteredApps = () => {
+    if (activeCategory === 'all') {
+      return allApps;
+    }
+    return allApps.filter(app => app.category === activeCategory);
+  };
+
   const cycleStatus = (appId: number) => {
     setAppStates(prev => {
-      const current = prev[appId];
+      const current = appStatesExtended[appId] || { status: 'disabled', statusText: '비활성화' };
       let newStatus: 'disabled' | 'pending' | 'active';
       let newStatusText: string;
       
@@ -125,7 +219,7 @@ function ConnectPage() {
 
   const getStatusBadge = (app: App) => {
     if (app.hasState) {
-      const currentState = appStates[app.id];
+      const currentState = appStatesExtended[app.id];
       return (
         <button
           onClick={() => cycleStatus(app.id)}
@@ -137,11 +231,14 @@ function ConnectPage() {
     }
 
     if (app.status === 'toggle') {
+      const isOn = toggleStates[app.id] || false;
       return (
         <div className={styles.toggleContainer}>
-          <span className={styles.toggleLabel}>on/off switch</span>
-          <div className={styles.toggleSwitch}>
-            <div className={styles.toggleButton}></div>
+          <div 
+            className={`${styles.toggleSwitch} ${isOn ? styles.toggleOn : ''}`}
+            onClick={() => toggleSwitch(app.id)}
+          >
+            <div className={`${styles.toggleButton} ${isOn ? styles.toggleButtonOn : ''}`}></div>
           </div>
         </div>
       );
@@ -183,7 +280,8 @@ function ConnectPage() {
             {categories.map(category => (
               <button
                 key={category.id}
-                className={`${styles.categoryButton} ${category.active ? styles.active : ''}`}
+                onClick={() => handleCategoryClick(category.id)}
+                className={`${styles.categoryButton} ${activeCategory === category.id ? styles.active : ''}`}
               >
                 {category.label}
               </button>
@@ -192,9 +290,20 @@ function ConnectPage() {
         </div>
 
         {/* Content Sections */}
-        <Section title="인기" apps={popularApps} />
-        <Section title="컴퓨터 접근" apps={computerApps} />
-        <Section title="구글" apps={googleApps} />
+        {activeCategory === 'all' ? (
+          <>
+            <Section title="인기" apps={popularApps} />
+            <Section title="컴퓨터 접근" apps={computerApps} />
+            <Section title="구글" apps={googleApps} />
+            <Section title="메일" apps={emailApps} />
+            <Section title="외부" apps={externalApps} />
+          </>
+        ) : (
+          <Section 
+            title={categories.find(c => c.id === activeCategory)?.label || ''} 
+            apps={getFilteredApps()} 
+          />
+        )}
       </div>
     </div>
   );

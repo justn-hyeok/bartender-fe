@@ -1,0 +1,209 @@
+.connectPage {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-default);
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: var(--space-8);
+}
+
+.pageTitle {
+  color: var(--text-primary);
+  font-size: var(--h1-font-size);
+  font-weight: var(--h1-font-weight);
+  line-height: var(--h1-line-height);
+  margin-bottom: var(--space-6);
+}
+
+.categoryFilter {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.categoryButton {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  border: none;
+  font-size: var(--body2-font-size);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-color: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+}
+
+.categoryButton:hover {
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+}
+
+.categoryButton.active {
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+}
+
+.section {
+  margin-bottom: var(--space-8);
+}
+
+.sectionTitle {
+  color: var(--text-primary);
+  font-size: var(--subtitle-font-size);
+  font-weight: var(--subtitle-font-weight);
+  line-height: var(--subtitle-line-height);
+  margin-bottom: var(--space-4);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-4);
+}
+
+.appCard {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  border: 1px solid var(--border-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.appCard:hover {
+  border-color: var(--border-secondary);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-3);
+  gap: var(--space-3);
+}
+
+.cardTitle {
+  color: var(--text-primary);
+  font-size: var(--body2-font-size);
+  font-weight: var(--font-medium);
+  line-height: var(--body2-line-height);
+  margin: 0;
+  flex: 1;
+}
+
+.cardDescription {
+  color: var(--text-secondary);
+  font-size: var(--caption-font-size);
+  font-weight: var(--caption-font-weight);
+  line-height: var(--caption-line-height);
+  margin: 0;
+}
+
+.statusBadge {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--caption-font-size);
+  font-weight: var(--font-medium);
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  font-family: var(--font-primary);
+}
+
+.statusBadge.disabled {
+  background-color: var(--red-500);
+}
+
+.statusBadge.disabled:hover {
+  background-color: var(--red-600);
+}
+
+.statusBadge.pending {
+  background-color: #eab308;
+}
+
+.statusBadge.pending:hover {
+  background-color: #ca8a04;
+}
+
+.statusBadge.active {
+  background-color: #22c55e;
+}
+
+.statusBadge.active:hover {
+  background-color: #16a34a;
+}
+
+.toggleContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.toggleLabel {
+  font-size: 12px;
+  color: #f87171;
+  font-weight: 400;
+}
+
+.toggleSwitch {
+  width: 40px;
+  height: 20px;
+  background-color: #4b5563;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.toggleSwitch.toggleOn {
+  background-color: #22c55e;
+}
+
+.toggleButton {
+  width: 16px;
+  height: 16px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.2s ease;
+}
+
+.toggleButton.toggleButtonOn {
+  transform: translateX(18px);
+  background-color: #ffffff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .connectPage {
+    padding: var(--space-4);
+  }
+  
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .categoryFilter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}

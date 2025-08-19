@@ -15,13 +15,6 @@ export default defineConfig({
         "@renderer": resolve("src/renderer"),
       },
     },
-    plugins: [
-      react({
-        jsxImportSource: "@emotion/react",
-        babel: {
-          plugins: ["@emotion/babel-plugin"],
-        },
-      }),
-    ],
+    plugins: [react()],
   },
 });

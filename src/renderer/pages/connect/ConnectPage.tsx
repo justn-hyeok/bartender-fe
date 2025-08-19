@@ -19,7 +19,10 @@ function ConnectPage() {
   const [appStates, setAppStates] = useState<Record<number, AppState>>({
     1: { status: 'disabled', statusText: '비활성화' },
     2: { status: 'pending', statusText: '읽기 전용' },
-    3: { status: 'active', statusText: '활성화' }
+    3: { status: 'active', statusText: '활성화' },
+    10: { status: 'pending', statusText: '읽기 전용' },
+    11: { status: 'active', statusText: '활성화' },
+    12: { status: 'active', statusText: '활성화' }
   });
   const [toggleStates, setToggleStates] = useState<Record<number, boolean>>({});
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -164,13 +167,7 @@ function ConnectPage() {
     [popularApps, computerApps, googleApps, emailApps, externalApps]
   );
 
-  // 인기 앱 ID들을 다른 카테고리에서 추가
-  const appStatesExtended = {
-    ...appStates,
-    10: { status: 'pending' as const, statusText: '읽기 전용' },
-    11: { status: 'active' as const, statusText: '활성화' }, // 구글 드라이브 ID 수정
-    12: { status: 'active' as const, statusText: '활성화' }
-  };
+  // appStates에서 직접 상태 가져오기
 
   const handleCategoryClick = (categoryId: string) => {
     setActiveCategory(categoryId);
@@ -192,7 +189,7 @@ function ConnectPage() {
 
   const cycleStatus = (appId: number) => {
     setAppStates(prev => {
-      const current = appStatesExtended[appId] || { status: 'disabled', statusText: '비활성화' };
+      const current = prev[appId] || { status: 'disabled', statusText: '비활성화' };
       let newStatus: 'disabled' | 'pending' | 'active';
       let newStatusText: string;
       
@@ -223,7 +220,7 @@ function ConnectPage() {
 
   const getStatusBadge = (app: App) => {
     if (app.hasState) {
-      const currentState = appStatesExtended[app.id];
+      const currentState = appStates[app.id] || { status: 'disabled', statusText: '비활성화' };
       return (
         <button
           onClick={() => cycleStatus(app.id)}

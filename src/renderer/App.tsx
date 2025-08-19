@@ -2,6 +2,9 @@ import * as React from 'react';
 import { useState } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
 import NewPage from './pages/newpage/NewPage';
+import ConnectPage from './pages/ConnectPage';
+import TodoPage from './pages/TodoPage';
+import ChatPage from './pages/ChatPage';
 
 export type PageType = '앱 연결' | '할 일' | '새 대화' | string;
 
@@ -13,26 +16,11 @@ function App(): React.JSX.Element {
       case '새 대화':
         return <NewPage />
       case '앱 연결':
-        return (
-          <div style={{ flex: 1, padding: '20px' }}>
-            <h1 className="display">앱 연결</h1>
-            <p className="body1">앱 연결 페이지입니다.</p>
-          </div>
-        );
+        return <ConnectPage />
       case '할 일':
-        return (
-          <div style={{ flex: 1, padding: '20px' }}>
-            <h1 className="display">할 일</h1>
-            <p className="body1">할 일 페이지입니다.</p>
-          </div>
-        );
+        return <TodoPage />
       default:
-        return (
-          <div style={{ flex: 1, padding: '20px' }}>
-            <h1 className="display">{currentPage}</h1>
-            <p className="body1">{currentPage} 대화 페이지입니다.</p>
-          </div>
-        );
+        return <ChatPage />
     }
   };
 

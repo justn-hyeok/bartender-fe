@@ -6,3 +6,4 @@ out
 *.log*
 .claude
 .idea
+.claude/settings.local.json

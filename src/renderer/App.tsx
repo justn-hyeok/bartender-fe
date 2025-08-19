@@ -4,10 +4,10 @@ import "./assets/styles/base.css";
 import "./assets/styles/fonts.css";
 import "./App.css";
 
-export type PageType = "chat" | "connect" | "todo" | "new";
+export type PageType = "새 대화" | "앱 연결" | "할 일" | "new";
 
-function App() {
-  const [currentPage, setCurrentPage] = useState<PageType>("chat");
+function App(): React.JSX.Element {
+  const [currentPage, setCurrentPage] = useState<PageType>("새 대화");
 
   return (
     <div className="app">

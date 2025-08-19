@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from './ChatForm.module.css';
-import TagButton from './TagButton';
+import TagButton from '../tagbutton/TagButton';
 
 const imgFrame47 = "http://localhost:3845/assets/289b711229164d93542ff2b3a2d78097b4197e4e.svg";
 const imgFrame46 = "http://localhost:3845/assets/ca5a75c6eef6607c9302e134d015bbbefe685063.svg";

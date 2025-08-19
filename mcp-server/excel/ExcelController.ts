@@ -1,84 +1,106 @@
-import { spawn } from 'child_process';
+// node-mcp-server/controllers/ExcelController.ts
+import * as ActiveX from "winax";
 
 export class ExcelController {
-  private jarPath: string;
+  private excel: any;
+  private workbook: any;
 
-  constructor(jarPath: string = 'ExcelController.jar') {
-    this.jarPath = jarPath;
-  }
-
-  private runMCP(args: string[]): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const proc = spawn('java', ['-jar', this.jarPath, ...args]);
-
-      let output = '';
-      proc.stdout.on('data', (data) => (output += data.toString()));
-      proc.stderr.on('data', (data) => console.error(`[Excel MCP ERROR] ${data}`));
-      proc.on('close', (code) => {
-        if (code === 0) resolve(output.trim());
-        else reject(new Error(`Excel MCP exited with code ${code}`));
-      });
-    });
+  constructor() {
+    // Excel COM 객체 생성
+    this.excel = new ActiveX.Object("Excel.Application");
+    this.excel.Visible = true; // 화면 표시 여부
   }
 
-  // ----- 시트 관리 -----
-  async createSheet(sheetName: string) {
-    return this.runMCP(['createSheet', sheetName]);
-  }
-  async deleteSheet(sheetName: string) {
-    return this.runMCP(['deleteSheet', sheetName]);
-  }
-  async renameSheet(oldName: string, newName: string) {
-    return this.runMCP(['renameSheet', oldName, newName]);
+  // ---------------- 파일 ----------------
+  openFile(path: string) {
+    this.workbook = this.excel.Workbooks.Open(path);
   }
 
-  // ----- 셀/범위 -----
-  async writeCell(sheet: string, cell: string, value: string) {
-    return this.runMCP(['writeCell', sheet, cell, value]);
-  }
-  async readCell(sheet: string, cell: string) {
-    return this.runMCP(['readCell', sheet, cell]);
-  }
-  async clearRange(sheet: string, range: string) {
-    return this.runMCP(['clearRange', sheet, range]);
+  saveFile() {
+    if (this.workbook) this.workbook.Save();
   }
 
-  // ----- 행/열 -----
-  async insertRow(sheet: string, rowIndex: number) {
-    return this.runMCP(['insertRow', sheet, rowIndex.toString()]);
-  }
-  async deleteRow(sheet: string, rowIndex: number) {
-    return this.runMCP(['deleteRow', sheet, rowIndex.toString()]);
-  }
-  async insertColumn(sheet: string, colIndex: number) {
-    return this.runMCP(['insertColumn', sheet, colIndex.toString()]);
-  }
-  async deleteColumn(sheet: string, colIndex: number) {
-    return this.runMCP(['deleteColumn', sheet, colIndex.toString()]);
+  saveAs(path: string) {
+    if (this.workbook) this.workbook.SaveAs(path);
   }
 
-  // ----- 서식 -----
-  async setCellStyle(sheet: string, cell: string, styleJson: string) {
-    return this.runMCP(['setCellStyle', sheet, cell, styleJson]);
+  closeFile() {
+    if (this.workbook) this.workbook.Close(false);
+    this.excel.Quit();
   }
 
-  // ----- 수식 -----
-  async setFormula(sheet: string, cell: string, formula: string) {
-    return this.runMCP(['setFormula', sheet, cell, formula]);
+  // ---------------- 시트 관리 ----------------
+  createSheet(sheetName: string) {
+    const sheet = this.workbook.Sheets.Add();
+    sheet.Name = sheetName;
   }
 
-  // ----- 차트 -----
-  async createChart(sheet: string, range: string, chartType: string) {
-    return this.runMCP(['createChart', sheet, range, chartType]);
+  deleteSheet(sheetName: string) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Delete();
   }
 
-  // ----- 테이블 -----
-  async createTable(sheet: string, range: string, tableName: string) {
-    return this.runMCP(['createTable', sheet, range, tableName]);
+  renameSheet(oldName: string, newName: string) {
+    const sheet = this.workbook.Sheets(oldName);
+    sheet.Name = newName;
   }
 
-  // ----- 매크로 -----
-  async runMacro(macroName: string) {
-    return this.runMCP(['runMacro', macroName]);
+  // ---------------- 셀/범위 ----------------
+  writeCell(sheetName: string, row: number, col: number, value: string | number) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Cells(row, col).Value = value;
+  }
+
+  readCell(sheetName: string, row: number, col: number): string {
+    const sheet = this.workbook.Sheets(sheetName);
+    return sheet.Cells(row, col).Value?.toString() ?? "";
+  }
+
+  clearRange(sheetName: string, range: string) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Range(range).ClearContents();
+  }
+
+  // ---------------- 행/열 ----------------
+  insertRow(sheetName: string, rowIndex: number) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Rows(rowIndex).Insert();
+  }
+
+  deleteRow(sheetName: string, rowIndex: number) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Rows(rowIndex).Delete();
+  }
+
+  insertColumn(sheetName: string, colIndex: number) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Columns(colIndex).Insert();
+  }
+
+  deleteColumn(sheetName: string, colIndex: number) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Columns(colIndex).Delete();
+  }
+
+  // ---------------- 수식/차트/테이블 ----------------
+  setFormula(sheetName: string, row: number, col: number, formula: string) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.Cells(row, col).Formula = formula;
+  }
+
+  createChart(sheetName: string, range: string, chartType: string) {
+    const sheet = this.workbook.Sheets(sheetName);
+    const chart = sheet.Shapes.AddChart2(251, chartType).Chart;
+    chart.SetSourceData(sheet.Range(range));
+  }
+
+  createTable(sheetName: string, range: string, tableName: string) {
+    const sheet = this.workbook.Sheets(sheetName);
+    sheet.ListObjects.Add(1, sheet.Range(range)).Name = tableName;
+  }
+
+  // ---------------- 매크로 ----------------
+  runMacro(macroName: string) {
+    this.excel.Run(macroName);
   }
 }

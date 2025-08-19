@@ -29,9 +29,11 @@
     "@tanstack/react-query": "^5.85.3",
     "axios": "^1.11.0",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.1",
     "electron-updater": "^6.3.9",
     "openai": "^5.12.2",
     "typia": "^9.7.1",
+    "winax": "^3.6.2",
     "zustand": "^5.0.7"
   },
   "devDependencies": {

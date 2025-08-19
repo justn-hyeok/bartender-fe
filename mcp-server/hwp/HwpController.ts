@@ -1,43 +1,78 @@
 // node-mcp-server/controllers/hwp.ts
-import { spawn } from 'child_process';
+import * as ActiveX from "winax";
 
 export class HwpController {
-  private javaMcpPath: string;
+  private hwp: any;
 
-  constructor(javaMcpPath: string) {
-    this.javaMcpPath = javaMcpPath; // HwpController.jar 위치
+  constructor() {
+    // 한컴 오피스 ActiveX 객체 생성
+    this.hwp = new ActiveX.Object("HWPFrame.HwpObject");
   }
 
-  private runCommand(args: string[]): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const proc = spawn('java', ['-jar', this.javaMcpPath, ...args]);
-
-      let output = '';
-      proc.stdout.on('data', (data) => (output += data.toString()));
-      proc.stderr.on('data', (data) => console.error(`[HWP MCP ERROR] ${data}`));
-      proc.on('close', (code) => (code === 0 ? resolve(output.trim()) : reject(new Error(`Exited ${code}`))));
-    });
+  // ---------------- 파일 ----------------
+  openFile(path: string) {
+    return this.hwp.Open(path);
   }
 
-  async openFile(path: string) { return this.runCommand(['openFile', path]); }
-  async saveFile() { return this.runCommand(['saveFile']); }
-  async saveAs(path: string) { return this.runCommand(['saveAs', path]); }
-  async closeFile() { return this.runCommand(['closeFile']); }
+  saveFile() {
+    return this.hwp.Save();
+  }
 
-  async insertText(text: string) { return this.runCommand(['insertText', text]); }
-  async getText() { return this.runCommand(['getText']); }
-  async deleteText(start: number, end: number) { return this.runCommand(['deleteText', start.toString(), end.toString()]); }
+  saveAs(path: string) {
+    return this.hwp.SaveAs(path);
+  }
 
-  async insertTable(rows: number, cols: number) { return this.runCommand(['insertTable', rows.toString(), cols.toString()]); }
-  async getCellText(tableIndex: number, row: number, col: number) { return this.runCommand(['getCellText', tableIndex.toString(), row.toString(), col.toString()]); }
-  async setCellText(tableIndex: number, row: number, col: number, text: string) { return this.runCommand(['setCellText', tableIndex.toString(), row.toString(), col.toString(), text]); }
+  closeFile() {
+    return this.hwp.Quit();
+  }
 
-  async insertImage(imagePath: string) { return this.runCommand(['insertImage', imagePath]); }
+  // ---------------- 텍스트 ----------------
+  insertText(text: string) {
+    return this.hwp.InsertText(text);
+  }
 
-  async getParagraph(index: number) { return this.runCommand(['getParagraph', index.toString()]); }
-  async setParagraphStyle(index: number, style: string) { return this.runCommand(['setParagraphStyle', index.toString(), style]); }
+  getText(): string {
+    return this.hwp.GetText();
+  }
 
-  async findReplace(findText: string, replaceText: string) { return this.runCommand(['findReplace', findText, replaceText]); }
+  deleteText(start: number, end: number) {
+    return this.hwp.DeleteText(start, end);
+  }
 
-  async getPageCount() { return this.runCommand(['getPageCount']); }
+  // ---------------- 표 ----------------
+  insertTable(rows: number, cols: number) {
+    return this.hwp.InsertTable(rows, cols);
+  }
+
+  getCellText(tableIndex: number, row: number, col: number): string {
+    return this.hwp.GetCellText(tableIndex, row, col);
+  }
+
+  setCellText(tableIndex: number, row: number, col: number, text: string) {
+    return this.hwp.SetCellText(tableIndex, row, col, text);
+  }
+
+  // ---------------- 이미지 ----------------
+  insertImage(imagePath: string) {
+    return this.hwp.InsertPicture(imagePath);
+  }
+
+  // ---------------- 단락 ----------------
+  getParagraph(index: number): string {
+    return this.hwp.GetParagraph(index);
+  }
+
+  setParagraphStyle(index: number, style: string) {
+    return this.hwp.SetParagraphStyle(index, style);
+  }
+
+  // ---------------- 검색 / 치환 ----------------
+  findReplace(findText: string, replaceText: string) {
+    return this.hwp.FindReplace(findText, replaceText);
+  }
+
+  // ---------------- 페이지 ----------------
+  getPageCount(): number {
+    return this.hwp.GetPageCount();
+  }
 }

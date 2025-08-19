@@ -7,3 +7,4 @@ out
 .claude
 .idea
 .claude/settings.local.json
+.env

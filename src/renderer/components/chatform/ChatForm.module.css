@@ -1,0 +1,77 @@
+.chatForm {
+  width: 100%;
+  max-width: 960px;
+}
+
+.inputContainer {
+  background-color: #2f333a;
+  border-radius: var(--radius-lg);
+  border: 1px solid #5f646d;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100px;
+  box-sizing: border-box;
+}
+
+.inputRow {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+}
+
+.textInput {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: var(--font-primary);
+  font-size: var(--body1-font-size);
+  font-weight: var(--font-regular);
+  line-height: 1.5;
+  padding: 0;
+}
+
+.textInput::placeholder {
+  color: #b5bac2;
+}
+
+.buttonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leftButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.iconButton {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.iconImage {
+  width: 100%;
+  height: 100%;
+}
+
+.submitButton {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}

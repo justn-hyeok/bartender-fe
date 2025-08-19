@@ -2,8 +2,8 @@ import { useState } from 'react';
 import styles from './ChatForm.module.css';
 import TagButton from '../tagbutton/TagButton';
 
-const imgFrame47 = "http://localhost:3845/assets/289b711229164d93542ff2b3a2d78097b4197e4e.svg";
-const imgFrame46 = "http://localhost:3845/assets/ca5a75c6eef6607c9302e134d015bbbefe685063.svg";
+import iconPlus from '../../assets/images/icon-plus.svg';
+import iconSend from '../../assets/images/icon-send.svg';
 
 interface ChatFormProps {
   onSubmit?: (message: string) => void;
@@ -34,14 +34,14 @@ export default function ChatForm({ onSubmit }: ChatFormProps) {
         </div>
         <div className={styles.buttonRow}>
           <div className={styles.leftButtons}>
-            <div className={styles.iconButton}>
-              <img src={imgFrame47} alt="+" className={styles.iconImage} />
-            </div>
+            <button type="button" className={styles.iconButton}>
+              <img src={iconPlus} alt="+" className={styles.iconImage} />
+            </button>
             <TagButton>앱 연결</TagButton>
             <TagButton>할 일</TagButton>
           </div>
           <button type="submit" className={styles.submitButton}>
-            <img src={imgFrame46} alt="전송" className={styles.iconImage} />
+            <img src={iconSend} alt="전송" className={styles.iconImage} />
           </button>
         </div>
       </div>

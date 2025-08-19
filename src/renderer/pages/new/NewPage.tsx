@@ -10,13 +10,17 @@ interface NewPageProps {
   onAddConversation?: ((name: string, firstMessage?: Message) => string) | null;
 }
 
+const CONVERSATION_NAME_MAX_LENGTH = 12;
+
 export default function NewPage({ onAddConversation }: NewPageProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const generateConversationName = (message: string): string => {
-    // 메시지에서 대화 제목 생성 (12글자부터 ... 추가)
+    // 메시지에서 대화 제목 생성
     const cleanMessage = message.trim().replace(/\s+/g, ' ');
-    return cleanMessage.length > 12 ? cleanMessage.substring(0, 12) + '...' : cleanMessage;
+    return cleanMessage.length > CONVERSATION_NAME_MAX_LENGTH 
+      ? cleanMessage.substring(0, CONVERSATION_NAME_MAX_LENGTH) + '...' 
+      : cleanMessage;
   };
 
   const handleMessageSubmit = async (message: string) => {
@@ -47,11 +51,24 @@ export default function NewPage({ onAddConversation }: NewPageProps) {
       // AI 응답 생성 및 추가
       AIService.createAIResponse(message).then(aiResponse => {
         ConversationStorage.addMessage(conversationId, aiResponse);
+      }).catch(error => {
+        console.error('AI 응답 생성 실패:', error);
+        // 에러 시 기본 응답 추가
+        const errorResponse = {
+          id: crypto.randomUUID(),
+          content: 'AI 응답을 생성하는 중 오류가 발생했습니다.',
+          isUser: false,
+          timestamp: new Date()
+        };
+        ConversationStorage.addMessage(conversationId, errorResponse);
+      }).finally(() => {
         setIsLoading(false);
       });
 
     } else {
-      console.log('메시지 전송:', message);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('메시지 전송:', message);
+      }
     }
   };
 

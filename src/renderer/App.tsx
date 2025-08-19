@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
 import NewPage from './pages/new/NewPage';
 import ConnectPage from './pages/connect/ConnectPage';
@@ -14,9 +14,9 @@ function App(): React.JSX.Element {
   const [currentPage, setCurrentPage] = useState<PageType>('새 대화');
   const [addConversationFunction, setAddConversationFunction] = useState<AddConversationFunction | null>(null);
 
-  const handleAddConversation = (addFunction: AddConversationFunction) => {
+  const handleAddConversation = useCallback((addFunction: AddConversationFunction) => {
     setAddConversationFunction(() => addFunction);
-  };
+  }, []);
 
   const renderPage = () => {
     switch (currentPage) {

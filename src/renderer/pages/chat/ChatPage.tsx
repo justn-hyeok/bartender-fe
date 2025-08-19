@@ -91,7 +91,21 @@ export default function ChatPage({ conversationId }: ChatPageProps) {
       if (conversationId) {
         ConversationStorage.addMessage(conversationId, aiResponse);
       }
-
+    }).catch(error => {
+      console.error('AI 응답 생성 실패:', error);
+      // 에러 시 기본 응답 추가
+      const errorResponse = {
+        id: crypto.randomUUID(),
+        content: 'AI 응답을 생성하는 중 오류가 발생했습니다.',
+        isUser: false,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorResponse]);
+      
+      if (conversationId) {
+        ConversationStorage.addMessage(conversationId, errorResponse);
+      }
+    }).finally(() => {
       setIsLoading(false);
     });
   };

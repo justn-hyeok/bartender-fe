@@ -1,7 +1,7 @@
 .sidebar {
-  background-color: #121417;
+  background-color: var(--bg-default);
   position: relative;
-  width: 220px;
+  width: var(--sidebar-width);
   height: 100vh;
   flex-shrink: 0;
   display: flex;

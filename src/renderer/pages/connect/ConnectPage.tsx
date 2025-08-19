@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import styles from './ConnectPage.module.css';
 
 interface AppState {
@@ -159,7 +159,10 @@ function ConnectPage() {
     }
   ];
 
-  const allApps = [...popularApps, ...computerApps, ...googleApps, ...emailApps, ...externalApps];
+  const allApps = useMemo(() => 
+    [...popularApps, ...computerApps, ...googleApps, ...emailApps, ...externalApps],
+    [popularApps, computerApps, googleApps, emailApps, externalApps]
+  );
 
   // 인기 앱 ID들을 다른 카테고리에서 추가
   const appStatesExtended = {
@@ -180,12 +183,12 @@ function ConnectPage() {
     }));
   };
 
-  const getFilteredApps = () => {
+  const filteredApps = useMemo(() => {
     if (activeCategory === 'all') {
       return allApps;
     }
     return allApps.filter(app => app.category === activeCategory);
-  };
+  }, [activeCategory, allApps]);
 
   const cycleStatus = (appId: number) => {
     setAppStates(prev => {
@@ -302,7 +305,7 @@ function ConnectPage() {
         ) : (
           <Section 
             title={categories.find(c => c.id === activeCategory)?.label || ''} 
-            apps={getFilteredApps()} 
+            apps={filteredApps} 
           />
         )}
       </div>

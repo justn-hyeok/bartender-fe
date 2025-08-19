@@ -65,10 +65,17 @@ export function useTodos() {
       setError(null);
       
       // API가 없을 때는 목 데이터 사용
-      setTimeout(() => {
+      if (process.env.NODE_ENV === 'development') {
+        // 개발 환경에서만 로딩 상태 시뮬레이션
+        setTimeout(() => {
+          setTodos(mockTodos);
+          setLoading(false);
+        }, 500);
+      } else {
+        // 프로덕션에서는 즉시 로드
         setTodos(mockTodos);
         setLoading(false);
-      }, 500);
+      }
       
       // 실제 API 호출 (현재는 주석 처리)
       // const response = await todoService.getAllTodos();

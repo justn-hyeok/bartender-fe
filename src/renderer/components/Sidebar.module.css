@@ -1,0 +1,99 @@
+.sidebar {
+  background-color: #121417;
+  position: relative;
+  width: 220px;
+  height: 100vh;
+}
+
+.topSection {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  justify-content: flex-start;
+  left: var(--space-2);
+  padding: 0;
+  top: var(--space-2);
+  width: 216px;
+}
+
+.conversationSection {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  justify-content: flex-start;
+  left: var(--space-2);
+  padding: 0;
+  top: 140px;
+  width: 216px;
+}
+
+.sidebarItem {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--space-1) var(--space-2);
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-base);
+  transition: background-color var(--transition-fast);
+}
+
+.sidebarItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebarItem.active {
+  background-color: #2f333a;
+}
+
+.sidebarItem.active:hover {
+  background-color: #2f333a;
+}
+
+.iconContainer {
+  background-color: #121417;
+  position: relative;
+  border-radius: var(--radius-lg);
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.iconText {
+  color: var(--white);
+  font-family: var(--font-primary);
+  font-size: var(--body1-font-size);
+  font-weight: var(--body1-font-weight);
+  line-height: var(--body1-line-height);
+  text-align: left;
+  white-space: nowrap;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.labelText {
+  color: var(--white);
+  font-family: var(--font-primary);
+  font-size: var(--body1-font-size);
+  font-weight: var(--body1-font-weight);
+  line-height: var(--body1-line-height);
+  text-align: left;
+  white-space: nowrap;
+}
+

@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import styles from './ChatForm.module.css';
-import TagButton from '../tagbutton/TagButton';
-
-import iconPlus from '../../assets/images/icon-plus.svg';
-import iconSend from '../../assets/images/icon-send.svg';
+import { useState } from "react";
+import iconPlus from "../../assets/images/icon-plus.svg";
+import iconSend from "../../assets/images/icon-send.svg";
+import TagButton from "../tagbutton/TagButton";
+import styles from "./ChatForm.module.css";
 
 interface ChatFormProps {
   onSubmit?: (message: string) => void;
@@ -11,13 +10,13 @@ interface ChatFormProps {
 }
 
 export default function ChatForm({ onSubmit, isLoading = false }: ChatFormProps) {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim() && !isLoading) {
       onSubmit?.(message);
-      setMessage('');
+      setMessage("");
     }
   };
 

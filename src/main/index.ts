@@ -27,14 +27,14 @@ function createWindow(): void {
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     // URL 검증 - 안전한 프로토콜만 허용
-    const allowedProtocols = ['http:', 'https:', 'mailto:', 'tel:'];
+    const allowedProtocols = ["http:", "https:", "mailto:", "tel:"];
     try {
       const urlObj = new URL(details.url);
       if (allowedProtocols.includes(urlObj.protocol)) {
         shell.openExternal(details.url);
       }
     } catch (error) {
-      console.warn('Invalid URL blocked:', details.url);
+      console.warn("Invalid URL blocked:", details.url);
     }
     return { action: "deny" };
   });
@@ -65,7 +65,7 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on("ping", () => {
     // IPC 핑 처리 - 민감 정보 로깅 방지
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log("pong");
     }
   });

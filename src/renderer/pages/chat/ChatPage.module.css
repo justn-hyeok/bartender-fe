@@ -2,71 +2,182 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #121417;
+  background-color: var(--bg-default);
   width: 100%;
 }
 
 .messagesContainer {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-4) var(--space-8);
+  padding: var(--space-6) var(--space-8);
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.messagesContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messagesContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messagesContainer::-webkit-scrollbar-thumb {
+  background: var(--gray-700);
+  border-radius: var(--radius-full);
+}
+
+.messagesContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-600);
 }
 
 .messagesList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  max-width: 960px;
+  gap: var(--space-4);
+  max-width: 800px;
   margin: 0 auto;
   width: 100%;
+  padding-bottom: var(--space-8);
 }
 
 .messageWrapper {
   display: flex;
   width: 100%;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .userMessage {
   justify-content: flex-end;
-  padding-left: 120px;
+  margin-left: var(--space-12);
 }
 
 .aiMessage {
   justify-content: flex-start;
-  padding-right: 120px;
+  margin-right: var(--space-12);
 }
 
 .messageBubble {
-  background-color: #000000;
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-  max-width: fit-content;
+  border-radius: 18px;
+  padding: var(--space-3) var(--space-4);
+  max-width: 320px;
   word-wrap: break-word;
+  position: relative;
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.aiMessage .messageBubble {
+  max-width: 500px;
+}
+
+.userMessage .messageBubble {
+  background: var(--black);
+  color: var(--white);
+  border-bottom-right-radius: 4px;
+  margin-left: auto;
 }
 
 .aiMessage .messageBubble {
   background-color: transparent;
+  color: var(--text-primary);
+  border-bottom-left-radius: 4px;
+  margin-right: auto;
 }
 
 .messageText {
-  color: var(--white);
   font-family: var(--font-primary);
-  font-size: var(--body1-font-size);
-  font-weight: var(--body1-font-weight);
-  line-height: var(--body1-line-height);
+  font-size: var(--body2-font-size);
+  font-weight: var(--body2-font-weight);
+  line-height: 1.4;
   margin: 0;
   white-space: pre-line;
 }
 
+.userMessage .messageText {
+  color: var(--white);
+}
+
+.aiMessage .messageText {
+  color: var(--text-primary);
+}
+
+.messageBubble:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 연속된 같은 사용자 메시지 스타일 */
+.messageWrapper + .messageWrapper.userMessage .messageBubble {
+  border-top-right-radius: 18px;
+}
+
+.messageWrapper + .messageWrapper.aiMessage .messageBubble {
+  border-top-left-radius: 18px;
+}
+
+/* 첫 번째와 마지막 메시지 스타일 */
+.messageWrapper:first-child.userMessage .messageBubble {
+  border-top-right-radius: 18px;
+}
+
+.messageWrapper:first-child.aiMessage .messageBubble {
+  border-top-left-radius: 18px;
+}
+
+.messageWrapper:last-child.userMessage .messageBubble {
+  border-bottom-right-radius: 4px;
+}
+
+.messageWrapper:last-child.aiMessage .messageBubble {
+  border-bottom-left-radius: 4px;
+}
+
 .chatFormContainer {
-  padding: var(--space-4) var(--space-8);
+  padding: var(--space-6) var(--space-8) var(--space-8);
   display: flex;
   justify-content: center;
+  background: linear-gradient(to top, var(--bg-default), transparent);
+  backdrop-filter: blur(10px);
 }
 
 .chatFormContainer form {
-  max-width: 960px;
+  max-width: 800px;
   width: 100%;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-secondary);
+  gap: var(--space-4);
+}
+
+.emptyState h3 {
+  font-size: var(--h2-font-size);
+  font-weight: var(--h2-font-weight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: var(--body1-font-size);
+  margin: 0;
+  max-width: 400px;
 }

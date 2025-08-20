@@ -191,16 +191,16 @@
   .connectPage {
     padding: var(--space-4);
   }
-  
+
   .cardGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .categoryFilter {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .cardHeader {
     flex-direction: column;
     align-items: flex-start;

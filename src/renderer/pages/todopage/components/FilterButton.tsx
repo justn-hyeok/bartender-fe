@@ -1,4 +1,4 @@
-import styles from './FilterButton.module.css';
+import styles from "./FilterButton.module.css";
 
 interface FilterButtonProps {
   category: string;
@@ -9,9 +9,7 @@ interface FilterButtonProps {
 export default function FilterButton({ category, isActive, onClick }: FilterButtonProps) {
   return (
     <button
-      className={`${styles.filterButton} ${
-        isActive ? styles.active : styles.inactive
-      }`}
+      className={`${styles.filterButton} ${isActive ? styles.active : styles.inactive}`}
       onClick={() => onClick(category)}
     >
       {category}

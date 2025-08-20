@@ -13,8 +13,8 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld("api", api);
   } catch (error) {
     // 프로덕션에서는 에러 정보 노출 방지
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Preload context bridge error:', error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Preload context bridge error:", error);
     }
   }
 } else {

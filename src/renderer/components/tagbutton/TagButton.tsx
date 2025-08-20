@@ -1,4 +1,4 @@
-import styles from './TagButton.module.css';
+import styles from "./TagButton.module.css";
 
 interface TagButtonProps {
   children: React.ReactNode;

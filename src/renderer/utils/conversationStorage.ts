@@ -13,7 +13,7 @@ export interface Conversation {
   updatedAt: Date;
 }
 
-const STORAGE_KEY = 'bartender_conversations';
+const STORAGE_KEY = "bartender_conversations";
 
 type ConversationUpdateListener = (conversationId: string) => void;
 
@@ -47,49 +47,49 @@ export class ConversationStorage {
         updatedAt: new Date(conv.updatedAt),
         messages: conv.messages.map((msg: StoredMessage) => ({
           ...msg,
-          timestamp: new Date(msg.timestamp)
-        }))
+          timestamp: new Date(msg.timestamp),
+        })),
       }));
     } catch (error) {
-      console.error('대화 목록 로드 실패:', error);
+      console.error("대화 목록 로드 실패:", error);
       return [];
     }
   }
 
   static getById(id: string): Conversation | null {
-    const conversations = this.getAll();
-    return conversations.find(conv => conv.id === id) || null;
+    const conversations = ConversationStorage.getAll();
+    return conversations.find((conv) => conv.id === id) || null;
   }
 
   static save(conversations: Conversation[]): void {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
     } catch (error) {
-      console.error('대화 저장 실패:', error);
+      console.error("대화 저장 실패:", error);
     }
   }
 
   static subscribe(conversationId: string, listener: ConversationUpdateListener): void {
-    if (!this.listeners.has(conversationId)) {
-      this.listeners.set(conversationId, new Set());
+    if (!ConversationStorage.listeners.has(conversationId)) {
+      ConversationStorage.listeners.set(conversationId, new Set());
     }
-    this.listeners.get(conversationId)!.add(listener);
+    ConversationStorage.listeners.get(conversationId)!.add(listener);
   }
 
   static unsubscribe(conversationId: string, listener: ConversationUpdateListener): void {
-    const conversationListeners = this.listeners.get(conversationId);
+    const conversationListeners = ConversationStorage.listeners.get(conversationId);
     if (conversationListeners) {
       conversationListeners.delete(listener);
       if (conversationListeners.size === 0) {
-        this.listeners.delete(conversationId);
+        ConversationStorage.listeners.delete(conversationId);
       }
     }
   }
 
   private static notifyListeners(conversationId: string): void {
-    const conversationListeners = this.listeners.get(conversationId);
+    const conversationListeners = ConversationStorage.listeners.get(conversationId);
     if (conversationListeners) {
-      conversationListeners.forEach(listener => listener(conversationId));
+      conversationListeners.forEach((listener) => listener(conversationId));
     }
   }
 
@@ -100,59 +100,59 @@ export class ConversationStorage {
       name,
       messages: firstMessage ? [firstMessage] : [],
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     };
 
-    const conversations = this.getAll();
+    const conversations = ConversationStorage.getAll();
     conversations.push(conversation);
-    this.save(conversations);
+    ConversationStorage.save(conversations);
 
     return conversation;
   }
 
   static update(id: string, updates: Partial<Conversation>): boolean {
-    const conversations = this.getAll();
-    const index = conversations.findIndex(conv => conv.id === id);
+    const conversations = ConversationStorage.getAll();
+    const index = conversations.findIndex((conv) => conv.id === id);
 
     if (index === -1) return false;
 
     conversations[index] = {
       ...conversations[index],
       ...updates,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
-    this.save(conversations);
+    ConversationStorage.save(conversations);
     return true;
   }
 
   static addMessage(conversationId: string, message: Message): boolean {
-    const conversations = this.getAll();
-    const index = conversations.findIndex(conv => conv.id === conversationId);
+    const conversations = ConversationStorage.getAll();
+    const index = conversations.findIndex((conv) => conv.id === conversationId);
 
     if (index === -1) return false;
 
     conversations[index].messages.push(message);
     conversations[index].updatedAt = new Date();
 
-    this.save(conversations);
-    this.notifyListeners(conversationId);
+    ConversationStorage.save(conversations);
+    ConversationStorage.notifyListeners(conversationId);
     return true;
   }
 
   static delete(id: string): boolean {
-    const conversations = this.getAll();
-    const filtered = conversations.filter(conv => conv.id !== id);
+    const conversations = ConversationStorage.getAll();
+    const filtered = conversations.filter((conv) => conv.id !== id);
 
     if (filtered.length === conversations.length) return false;
 
-    this.save(filtered);
+    ConversationStorage.save(filtered);
     return true;
   }
 
   static generateUniqueName(baseName: string): string {
-    const conversations = this.getAll();
-    const existingNames = conversations.map(conv => conv.name);
+    const conversations = ConversationStorage.getAll();
+    const existingNames = conversations.map((conv) => conv.name);
 
     let name = baseName;
     let counter = 1;

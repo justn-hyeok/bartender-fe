@@ -1,7 +1,12 @@
-import type { TodoListResponse, TodoResponse, CreateTodoRequest, UpdateTodoRequest } from '../types/todo';
+import type {
+  CreateTodoRequest,
+  TodoListResponse,
+  TodoResponse,
+  UpdateTodoRequest,
+} from "../types/todo";
 
 class TodoService {
-  private baseUrl = 'http://localhost:3000/api/todos'; // 백엔드 API 엔드포인트
+  private baseUrl = "http://localhost:3000/api/todos"; // 백엔드 API 엔드포인트
 
   async getAllTodos(): Promise<TodoListResponse> {
     try {
@@ -11,10 +16,10 @@ class TodoService {
       }
       return await response.json();
     } catch (error) {
-      console.error('Failed to fetch todos:', error);
+      console.error("Failed to fetch todos:", error);
       return {
         success: false,
-        data: []
+        data: [],
       };
     }
   }
@@ -35,9 +40,9 @@ class TodoService {
   async createTodo(todo: CreateTodoRequest): Promise<TodoResponse> {
     try {
       const response = await fetch(this.baseUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(todo),
       });
@@ -46,7 +51,7 @@ class TodoService {
       }
       return await response.json();
     } catch (error) {
-      console.error('Failed to create todo:', error);
+      console.error("Failed to create todo:", error);
       throw error;
     }
   }
@@ -54,9 +59,9 @@ class TodoService {
   async updateTodo(id: string, updates: UpdateTodoRequest): Promise<TodoResponse> {
     try {
       const response = await fetch(`${this.baseUrl}/${id}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(updates),
       });
@@ -73,7 +78,7 @@ class TodoService {
   async deleteTodo(id: string): Promise<{ success: boolean }> {
     try {
       const response = await fetch(`${this.baseUrl}/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

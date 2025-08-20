@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import styles from './NewPage.module.css';
-import Title from '../../components/title/Title';
-import ChatForm from '../../components/chatform/ChatForm';
-import type { Message } from '../../utils/conversationStorage';
-import { ConversationStorage } from '../../utils/conversationStorage';
-import { AIService } from '../../utils/aiService';
+import { useState } from "react";
+import ChatForm from "../../components/chatform/ChatForm";
+import Title from "../../components/title/Title";
+import { AIService } from "../../utils/aiService";
+import type { Message } from "../../utils/conversationStorage";
+import { ConversationStorage } from "../../utils/conversationStorage";
+import styles from "./NewPage.module.css";
 
 interface NewPageProps {
   onAddConversation?: ((name: string, firstMessage?: Message) => string) | null;
@@ -17,9 +17,9 @@ export default function NewPage({ onAddConversation }: NewPageProps) {
 
   const generateConversationName = (message: string): string => {
     // 메시지에서 대화 제목 생성
-    const cleanMessage = message.trim().replace(/\s+/g, ' ');
-    return cleanMessage.length > CONVERSATION_NAME_MAX_LENGTH 
-      ? cleanMessage.substring(0, CONVERSATION_NAME_MAX_LENGTH) + '...' 
+    const cleanMessage = message.trim().replace(/\s+/g, " ");
+    return cleanMessage.length > CONVERSATION_NAME_MAX_LENGTH
+      ? cleanMessage.substring(0, CONVERSATION_NAME_MAX_LENGTH) + "..."
       : cleanMessage;
   };
 
@@ -34,7 +34,7 @@ export default function NewPage({ onAddConversation }: NewPageProps) {
         id: crypto.randomUUID(),
         content: message,
         isUser: true,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
       // 즉시 대화 생성
@@ -49,25 +49,27 @@ export default function NewPage({ onAddConversation }: NewPageProps) {
       }
 
       // AI 응답 생성 및 추가
-      AIService.createAIResponse(message).then(aiResponse => {
-        ConversationStorage.addMessage(conversationId, aiResponse);
-      }).catch(error => {
-        console.error('AI 응답 생성 실패:', error);
-        // 에러 시 기본 응답 추가
-        const errorResponse = {
-          id: crypto.randomUUID(),
-          content: 'AI 응답을 생성하는 중 오류가 발생했습니다.',
-          isUser: false,
-          timestamp: new Date()
-        };
-        ConversationStorage.addMessage(conversationId, errorResponse);
-      }).finally(() => {
-        setIsLoading(false);
-      });
-
+      AIService.createAIResponse(message)
+        .then((aiResponse) => {
+          ConversationStorage.addMessage(conversationId, aiResponse);
+        })
+        .catch((error) => {
+          console.error("AI 응답 생성 실패:", error);
+          // 에러 시 기본 응답 추가
+          const errorResponse = {
+            id: crypto.randomUUID(),
+            content: "AI 응답을 생성하는 중 오류가 발생했습니다.",
+            isUser: false,
+            timestamp: new Date(),
+          };
+          ConversationStorage.addMessage(conversationId, errorResponse);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('메시지 전송:', message);
+      if (process.env.NODE_ENV === "development") {
+        console.log("메시지 전송:", message);
       }
     }
   };

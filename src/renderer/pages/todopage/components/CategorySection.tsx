@@ -1,6 +1,6 @@
-import type { TodoItem } from '../../../types/todo';
-import TodoCard from './TodoCard';
-import styles from './CategorySection.module.css';
+import type { TodoItem } from "../../../types/todo";
+import styles from "./CategorySection.module.css";
+import TodoCard from "./TodoCard";
 
 interface CategorySectionProps {
   category: string;
@@ -9,18 +9,18 @@ interface CategorySectionProps {
   onDelete: (id: string) => void;
 }
 
-export default function CategorySection({ category, todos, onComplete, onDelete }: CategorySectionProps) {
+export default function CategorySection({
+  category,
+  todos,
+  onComplete,
+  onDelete,
+}: CategorySectionProps) {
   return (
     <div className={styles.categorySection}>
       <h2 className={styles.categoryTitle}>{category}</h2>
       <div className={styles.todosContainer}>
-        {todos.map(todo => (
-          <TodoCard 
-            key={todo.id}
-            todo={todo}
-            onComplete={onComplete}
-            onDelete={onDelete}
-          />
+        {todos.map((todo) => (
+          <TodoCard key={todo.id} todo={todo} onComplete={onComplete} onDelete={onDelete} />
         ))}
       </div>
     </div>

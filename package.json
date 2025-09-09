@@ -1,7 +1,7 @@
 {
-  "name": "bartender-fe",
-  "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "name": "bartender",
+  "version": "0.3.13-beta",
+  "description": "Effortless MCP, powered by Bartender.",
   "main": "./out/main/index.js",
   "author": "HWANG JUN HYEOK",
   "homepage": "https://github.com/justn-hyeok/bartender-fe",
@@ -63,7 +63,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/icon.ico",
+      "icon": "build/resources/Bartender.ico",
       "signAndEditExecutable": false
     },
     "nsis": {
@@ -76,11 +76,11 @@
     },
     "mac": {
       "category": "public.app-category.productivity",
-      "icon": "build/icon.icns"
+      "icon": "build/resources/Bartender.icns"
     },
     "linux": {
       "target": "AppImage",
-      "icon": "build/icon.png"
+      "icon": "build/resources/Bartender.svg"
     }
   },
   "pnpm": {

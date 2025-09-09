@@ -1,11 +1,12 @@
 import { join } from "node:path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
-import icon from "../../resources/icon.png?asset";
+import icon from "../../resources/Bartender.svg?asset";
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    title: "Bartender",
     width: 1200,
     height: 800,
     minWidth: 800,

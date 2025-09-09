@@ -54,7 +54,7 @@
   },
   "build": {
     "appId": "com.hwangjunhyeok.bartender",
-    "productName": "Bartender FE",
+    "productName": "Bartender",
     "directories": {
       "output": "dist"
     },
@@ -81,7 +81,7 @@
     },
     "linux": {
       "target": "AppImage",
-      "icon": "resources/Bartender.svg"
+      "icon": "resources/Bartender.png"
     }
   },
   "pnpm": {

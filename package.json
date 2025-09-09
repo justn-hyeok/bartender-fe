@@ -6,8 +6,9 @@
   "author": "HWANG JUN HYEOK",
   "homepage": "https://github.com/justn-hyeok/bartender-fe",
   "scripts": {
-    "dev": "rm -rf out/ && electron-vite dev",
-    "build": "rm -rf dist/ out/ && pnpm typecheck && electron-vite build",
+    "dev": "electron-vite dev",
+    "build": "pnpm typecheck && electron-vite build",
+    "clean": "rm -rf dist/ out/",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format .",

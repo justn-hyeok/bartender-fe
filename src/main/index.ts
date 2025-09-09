@@ -1,7 +1,9 @@
 import { join } from "node:path";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { app, BrowserWindow, ipcMain, shell } from "electron";
-import icon from "../../resources/Bartender.svg?asset";
+import { app, BrowserWindow, ipcMain, shell, nativeImage } from "electron";
+import iconSvg from "../../resources/Bartender.svg?asset";
+import iconIcns from "../../resources/Bartender.icns?asset";
+import iconIco from "../../resources/Bartender.ico?asset";
 
 function createWindow(): void {
   // Create the browser window.
@@ -15,7 +17,7 @@ function createWindow(): void {
     maxHeight: 1080,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { icon } : {}),
+    icon: process.platform === "darwin" ? iconIcns : process.platform === "win32" ? iconIco : iconSvg,
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: true,
@@ -49,12 +51,25 @@ function createWindow(): void {
   }
 }
 
+// Set app name early for menu bar
+app.setName("Bartender");
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.hwangjunhyeok.bartender");
+
+  // Set dock icon for macOS
+  if (process.platform === "darwin" && app.dock) {
+    const iconPath = join(__dirname, "../../resources/Bartender.icns");
+    const image = nativeImage.createFromPath(iconPath);
+    if (!image.isEmpty()) {
+      app.dock.setIcon(image);
+    }
+  }
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

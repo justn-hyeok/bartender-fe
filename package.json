@@ -6,8 +6,8 @@
   "author": "HWANG JUN HYEOK",
   "homepage": "https://github.com/justn-hyeok/bartender-fe",
   "scripts": {
-    "dev": "electron-vite dev",
-    "build": "pnpm typecheck && electron-vite build",
+    "dev": "rm -rf out/ && electron-vite dev",
+    "build": "rm -rf dist/ out/ && pnpm typecheck && electron-vite build",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format .",
@@ -63,7 +63,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/resources/Bartender.ico",
+      "icon": "resources/Bartender.ico",
       "signAndEditExecutable": false
     },
     "nsis": {
@@ -71,16 +71,16 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico"
+      "installerIcon": "resources/Bartender.ico",
+      "uninstallerIcon": "resources/Bartender.ico"
     },
     "mac": {
       "category": "public.app-category.productivity",
-      "icon": "build/resources/Bartender.icns"
+      "icon": "resources/Bartender.icns"
     },
     "linux": {
       "target": "AppImage",
-      "icon": "build/resources/Bartender.svg"
+      "icon": "resources/Bartender.svg"
     }
   },
   "pnpm": {
